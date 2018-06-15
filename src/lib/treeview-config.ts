@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class TreeviewConfig {
+    hasAdd = true;
+    hasCheckbox = false;
     hasAllCheckBox = true;
     hasFilter = false;
     hasCollapseExpand = false;
@@ -13,6 +15,8 @@ export class TreeviewConfig {
     }
 
     public static create(fields?: {
+        hasAdd?: boolean
+        hasCheckbox?: boolean,
         hasAllCheckBox?: boolean,
         hasFilter?: boolean,
         hasCollapseExpand?: boolean,

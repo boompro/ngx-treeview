@@ -14,6 +14,8 @@ export class TreeviewItemComponent {
     @Input() template: TemplateRef<TreeviewItemTemplateContext>;
     @Input() item: TreeviewItem;
     @Output() checkedChange = new EventEmitter<boolean>();
+    @Output() addItem = new EventEmitter<any>();
+    @Output() selectItem = new EventEmitter<any>();
 
     constructor(
         private defaultConfig: TreeviewConfig
@@ -56,5 +58,15 @@ export class TreeviewItemComponent {
         }
 
         this.checkedChange.emit(checked);
+    }
+
+    onAddItem(e) {
+      console.log(e);
+      this.addItem.emit(e);
+    }
+
+    onSelectItem(e) {
+      console.log(e);
+      this.selectItem.emit(e);
     }
 }

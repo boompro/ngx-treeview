@@ -13,10 +13,22 @@
     .row-item {
       margin-bottom: .3rem;
       flex-wrap: nowrap;
+      .input-container {
+        position: relative;
+        .fa-check {
+          position: absolute;
+          right: 10px;
+          top: 10px;
+        }
+      }
       .fa {
         width: .8rem;
         cursor: pointer;
         margin-right: .3rem;
+      }
+
+      .fa-plus {
+        margin-left: .3rem;
       }
     }
   }

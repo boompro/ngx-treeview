@@ -13,12 +13,14 @@ export interface TreeItem {
     checked?: boolean;
     collapsed?: boolean;
     children?: TreeItem[];
+    isEdit?: boolean;
 }
 
 export class TreeviewItem {
     private internalDisabled = false;
     private internalChecked = true;
     private internalCollapsed = false;
+    private internalEdit = false;
     private internalChildren: TreeviewItem[];
     text: string;
     value: any;
@@ -38,6 +40,9 @@ export class TreeviewItem {
         }
         if (isBoolean(item.collapsed)) {
             this.collapsed = item.collapsed;
+        }
+        if (isBoolean(item.isEdit)) {
+          this.internalEdit = item.isEdit;
         }
         if (isBoolean(item.disabled)) {
             this.disabled = item.disabled;
@@ -71,6 +76,14 @@ export class TreeviewItem {
 
     get indeterminate(): boolean {
         return this.checked === undefined;
+    }
+
+    get edit(): boolean {
+      return this.internalEdit;
+    }
+
+    set edit(value: boolean) {
+      this.internalEdit = value;
     }
 
     setCheckedRecursive(value: boolean) {
@@ -162,6 +175,24 @@ export class TreeviewItem {
 
     correctChecked() {
         this.internalChecked = this.getCorrectChecked();
+    }
+
+    addChildItem() {
+      const newItem = new TreeviewItem({
+        checked: false,
+        children: [],
+        collapsed: false,
+        disabled: false,
+        text: '',
+        value: '',
+        isEdit: true
+      }, false);
+      if (this.internalChildren) {
+        this.internalChildren.push(newItem);
+      } else {
+        this.internalChildren = [];
+        this.internalChildren.push(newItem);
+      }
     }
 
     private getCorrectChecked(): boolean {

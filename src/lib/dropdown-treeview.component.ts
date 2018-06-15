@@ -41,4 +41,12 @@ export class DropdownTreeviewComponent {
     onFilterChange(text: string) {
       this.filterChange.emit(text);
     }
+
+    onAddItem(e) {
+      console.log(e);
+    }
+
+    onSelectItem(e) {
+      console.log(e);
+    }
 }
