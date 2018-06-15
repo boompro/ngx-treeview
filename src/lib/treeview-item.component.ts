@@ -65,8 +65,8 @@ export class TreeviewItemComponent {
       this.addItem.emit(e);
     }
 
-    onSelectItem(e) {
-      console.log(e);
-      this.selectItem.emit(e);
+    onSelectItem(item: TreeviewItem) {
+      console.log(item.value);
+      this.selectItem.emit(item);
     }
 }

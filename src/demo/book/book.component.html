@@ -69,7 +69,9 @@
             </select>
           </div>
           <ngx-dropdown-treeview [config]="config" [items]="items" [buttonClass]="buttonClass" (selectedChange)="values = $event" [disabled]="!dropdownEnabled"
-            [ngxDisabledOnSelector]="'button.dropdown-toggle'" (filterChange)="onFilterChange($event)">
+            [ngxDisabledOnSelector]="'button.dropdown-toggle'" (filterChange)="onFilterChange($event)"
+            (selectItem)="logSelect($event)"
+            (itemWasAdded)="logAdd($event)">
           </ngx-dropdown-treeview>
         </div>
       </div>

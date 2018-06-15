@@ -20,8 +20,11 @@ export class DropdownTreeviewComponent {
     @Input() config: TreeviewConfig;
     @Output() selectedChange = new EventEmitter<any[]>(true);
     @Output() filterChange = new EventEmitter<string>();
+    @Output() selectItem = new EventEmitter<TreeviewItem>();
+    @Output() itemWasAdded = new EventEmitter<any>();
     @ViewChild(TreeviewComponent) treeviewComponent: TreeviewComponent;
     @ViewChild(DropdownDirective) dropdownDirective: DropdownDirective;
+    private _currentSelected: TreeviewItem;
 
     constructor(
         public i18n: TreeviewI18n,
@@ -31,7 +34,15 @@ export class DropdownTreeviewComponent {
     }
 
     getText(): string {
+      if (!this.config.hasCheckbox) {
+         if (this._currentSelected) {
+          return this._currentSelected.text;
+         } else {
+           return this.items[0].text;
+         }
+      } else {
         return this.i18n.getText(this.treeviewComponent.selection);
+      }
     }
 
     onSelectedChange(values: any[]) {
@@ -43,10 +54,13 @@ export class DropdownTreeviewComponent {
     }
 
     onAddItem(e) {
-      console.log(e);
+      this.itemWasAdded.emit(e);
     }
 
-    onSelectItem(e) {
-      console.log(e);
+    onSelectItem(item: TreeviewItem) {
+      if (!this.config.hasCheckbox) {
+        this._currentSelected = item;
+      }
+      this.selectItem.emit(item);
     }
 }

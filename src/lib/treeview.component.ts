@@ -54,7 +54,7 @@ export class TreeviewComponent implements OnChanges {
     @Input() config: TreeviewConfig;
     @Output() selectedChange = new EventEmitter<any[]>();
     @Output() filterChange = new EventEmitter<string>();
-    @Output() addNewItem = new EventEmitter<TreeviewItem>();
+    @Output() addNewItem = new EventEmitter<any>();
     @Output() selectItem = new EventEmitter<TreeviewItem>();
     headerTemplateContext: TreeviewHeaderTemplateContext;
     allItem: TreeviewItem;
@@ -132,7 +132,6 @@ export class TreeviewComponent implements OnChanges {
 
     onSelectItem(item: TreeviewItem) {
       if (!item.children) {
-        console.log(item);
         this.selectItem.emit(item);
       }
     }
@@ -142,15 +141,18 @@ export class TreeviewComponent implements OnChanges {
       this.selectItem.emit(e);
     }
 
-    bublingAdd(e) {
-      console.log(e);
-      this.addNewItem.emit(e);
-    }
-
     onAddNewItem(item: TreeviewItem) {
       item.collapsed = false;
       item.addChildItem();
-      this.addNewItem.emit(item.children[item.children.length - 1]);
+      this.addNewItem.emit({
+        added: item.children[item.children.length - 1],
+        parent: item
+      });
+    }
+
+    bublingAdd(e) {
+      console.log(e);
+      this.addNewItem.emit(e);
     }
 
     private createHeaderTemplateContext() {

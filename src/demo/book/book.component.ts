@@ -44,4 +44,12 @@ export class BookComponent implements OnInit {
     onFilterChange(value: string) {
         console.log('filter:', value);
     }
+
+    logSelect(e) {
+      console.log(e);
+    }
+
+    logAdd(e) {
+      console.log(e);
+    }
 }
