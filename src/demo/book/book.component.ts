@@ -14,6 +14,7 @@ export class BookComponent implements OnInit {
     items: TreeviewItem[];
     values: number[];
     config = TreeviewConfig.create({
+        hasAdd: true,
         hasAllCheckBox: true,
         hasFilter: true,
         hasCollapseExpand: true,

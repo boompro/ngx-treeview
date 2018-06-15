@@ -38,7 +38,7 @@ export class DropdownTreeviewComponent {
          if (this._currentSelected) {
           return this._currentSelected.text;
          } else {
-           return this.items[0].text;
+           return 'Element not select';
          }
       } else {
         return this.i18n.getText(this.treeviewComponent.selection);
@@ -62,5 +62,18 @@ export class DropdownTreeviewComponent {
         this._currentSelected = item;
       }
       this.selectItem.emit(item);
+    }
+
+    addNewRootItem() {
+      const item = new TreeviewItem({
+        isEdit: true,
+        text: '',
+        value: ''
+      });
+      this.items.push(item);
+      this.onAddItem({
+        parent: null,
+        added: item
+      });
     }
 }
