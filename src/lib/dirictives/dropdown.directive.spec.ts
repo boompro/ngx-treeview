@@ -1,8 +1,8 @@
-import { Component, DebugElement } from '@angular/core';
-import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { expect, createGenericTestComponent, eventHelper } from '../testing';
+import { expect, createGenericTestComponent } from '../../testing';
 import { DropdownDirective } from './dropdown.directive';
 import { DropdownToggleDirective } from './dropdown-toggle.directive';
 

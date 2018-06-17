@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TreeviewItem, TreeviewSelection } from './treeview-item';
+import { TreeviewSelection } from './treeview-item';
 
 @Injectable()
 export abstract class TreeviewI18n {

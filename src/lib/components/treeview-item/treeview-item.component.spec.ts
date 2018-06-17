@@ -3,11 +3,11 @@ import { TestBed, ComponentFixture, fakeAsync, tick, async, inject } from '@angu
 import { BrowserModule, By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { slice } from 'lodash';
-import { expect, createGenericTestComponent } from '../testing';
-import { TreeviewConfig } from './treeview-config';
-import { TreeviewItemComponent } from './treeview-item.component';
-import { TreeviewItem } from './treeview-item';
-import { fakeItemTemplate } from './treeview-item-template.spec';
+import { expect, createGenericTestComponent } from '../../../testing';
+import { TreeviewConfig } from '../../classes/treeview-config';
+import { TreeviewItemComponent } from '../treeview-item/treeview-item.component';
+import { TreeviewItem } from '../../classes/treeview-item';
+import { fakeItemTemplate } from '../../treeview-item-template.spec';
 
 interface FakeData {
     item: TreeviewItem;

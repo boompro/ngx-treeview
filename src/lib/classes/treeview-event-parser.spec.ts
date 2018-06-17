@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { TreeviewItem, TreeviewSelection } from './treeview-item';
-import { TreeviewComponent } from './treeview.component';
-import { TreeviewModule } from './treeview.module';
+import { TreeviewComponent } from '../components/treeview/treeview.component';
+import { TreeviewModule } from '../treeview.module';
 import {
     TreeviewEventParser, DefaultTreeviewEventParser, DownlineTreeviewEventParser, OrderDownlineTreeviewEventParser
 } from './treeview-event-parser';

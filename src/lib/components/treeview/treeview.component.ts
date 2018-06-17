@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter, SimpleChanges, OnChanges, TemplateRef } from '@angular/core';
 import { isNil, includes } from 'lodash';
-import { TreeviewI18n } from './treeview-i18n';
-import { TreeviewItem, TreeviewSelection } from './treeview-item';
-import { TreeviewConfig } from './treeview-config';
-import { TreeviewEventParser } from './treeview-event-parser';
-import { TreeviewHeaderTemplateContext } from './treeview-header-template-context';
-import { TreeviewItemTemplateContext } from './treeview-item-template-context';
-import { TreeviewHelper } from './treeview-helper';
+import { TreeviewI18n } from '../../classes/treeview-i18n';
+import { TreeviewItem, TreeviewSelection } from '../../classes/treeview-item';
+import { TreeviewConfig } from '../../classes/treeview-config';
+import { TreeviewEventParser } from '../../classes/treeview-event-parser';
+import { TreeviewHeaderTemplateContext } from '../../interfaces/treeview-header-template-context';
+import { TreeviewItemTemplateContext } from '../../interfaces/treeview-item-template-context';
+import { TreeviewHelper } from '../../classes/treeview-helper';
 
 class FilterTreeviewItem extends TreeviewItem {
     private readonly refItem: TreeviewItem;

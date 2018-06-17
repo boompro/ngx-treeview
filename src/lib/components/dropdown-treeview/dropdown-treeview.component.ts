@@ -1,11 +1,11 @@
 ﻿import { Component, EventEmitter, Input, Output, HostListener, ViewChild, TemplateRef } from '@angular/core';
-import { TreeviewI18n } from './treeview-i18n';
-import { TreeviewItem } from './treeview-item';
-import { TreeviewConfig } from './treeview-config';
-import { TreeviewComponent } from './treeview.component';
-import { DropdownDirective } from './dropdown.directive';
-import { TreeviewHeaderTemplateContext } from './treeview-header-template-context';
-import { TreeviewItemTemplateContext } from './treeview-item-template-context';
+import { TreeviewI18n } from '../../classes/treeview-i18n';
+import { TreeviewItem } from '../../classes/treeview-item';
+import { TreeviewConfig } from '../../classes/treeview-config';
+import { TreeviewComponent } from '../treeview/treeview.component';
+import { DropdownDirective } from '../../dirictives/dropdown.directive';
+import { TreeviewHeaderTemplateContext } from '../../interfaces/treeview-header-template-context';
+import { TreeviewItemTemplateContext } from '../../interfaces/treeview-item-template-context';
 
 @Component({
     selector: 'ngx-dropdown-treeview',

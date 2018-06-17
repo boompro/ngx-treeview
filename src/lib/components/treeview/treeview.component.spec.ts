@@ -2,13 +2,13 @@
 import { TestBed, ComponentFixture, fakeAsync, tick, async } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { TreeviewComponent } from './treeview.component';
-import { TreeviewItemComponent } from './treeview-item.component';
-import { TreeviewConfig } from './treeview-config';
-import { TreeviewI18n, TreeviewI18nDefault } from './treeview-i18n';
-import { TreeviewEventParser, DefaultTreeviewEventParser } from './treeview-event-parser';
-import { TreeviewItem } from './treeview-item';
-import { expect, createGenericTestComponent, eventHelper } from '../testing';
+import { TreeviewComponent } from '../treeview/treeview.component';
+import { TreeviewItemComponent } from '../treeview-item/treeview-item.component';
+import { TreeviewConfig } from '../../classes/treeview-config';
+import { TreeviewI18n, TreeviewI18nDefault } from '../../classes/treeview-i18n';
+import { TreeviewEventParser, DefaultTreeviewEventParser } from '../../classes/treeview-event-parser';
+import { TreeviewItem } from '../../classes/treeview-item';
+import { expect, createGenericTestComponent, eventHelper } from '../../../testing';
 
 interface FakeData {
     config: TreeviewConfig;

@@ -4,7 +4,7 @@ import { BrowserModule, By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { DropdownToggleDirective } from './dropdown-toggle.directive';
 import { DropdownDirective } from './dropdown.directive';
-import { expect, createGenericTestComponent } from '../testing';
+import { expect, createGenericTestComponent } from '../../testing';
 
 @Component({
     selector: 'ngx-test',

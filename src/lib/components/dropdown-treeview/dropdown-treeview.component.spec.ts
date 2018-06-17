@@ -2,15 +2,14 @@ import { Component, DebugElement } from '@angular/core';
 import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { TreeviewComponent } from './treeview.component';
-import { DropdownTreeviewComponent } from './dropdown-treeview.component';
-import { TreeviewItemComponent } from './treeview-item.component';
-import { TreeviewConfig } from './treeview-config';
-import { TreeviewItem } from './treeview-item';
-import { TreeviewI18n, TreeviewI18nDefault } from './treeview-i18n';
-import { TreeviewEventParser, DefaultTreeviewEventParser } from './treeview-event-parser';
-import { expect, createGenericTestComponent } from '../testing';
-import { queryFilterTextBox, queryCheckboxAll } from './treeview.component.spec';
+import { TreeviewComponent } from '../treeview/treeview.component';
+import { DropdownTreeviewComponent } from '../dropdown-treeview/dropdown-treeview.component';
+import { TreeviewItemComponent } from '../treeview-item/treeview-item.component';
+import { TreeviewConfig } from '../../classes/treeview-config';
+import { TreeviewItem } from '../../classes/treeview-item';
+import { TreeviewI18n, TreeviewI18nDefault } from '../../classes/treeview-i18n';
+import { TreeviewEventParser, DefaultTreeviewEventParser } from '../../classes/treeview-event-parser';
+import { expect, createGenericTestComponent } from '../../../testing';
 
 interface FakeData {
     config: TreeviewConfig;
