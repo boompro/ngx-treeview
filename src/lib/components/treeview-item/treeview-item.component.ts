@@ -59,14 +59,4 @@ export class TreeviewItemComponent {
 
         this.checkedChange.emit(checked);
     }
-
-    onAddItem(e) {
-      console.log(e);
-      this.addItem.emit(e);
-    }
-
-    onSelectItem(item: TreeviewItem) {
-      console.log(item.value);
-      this.selectItem.emit(item);
-    }
 }

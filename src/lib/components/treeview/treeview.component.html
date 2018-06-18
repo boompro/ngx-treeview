@@ -10,7 +10,8 @@
       </label>
       <div class="input-container">
         <input *ngIf="item.edit" type="text" class="form-control" [(ngModel)]="item.text">
-        <i *ngIf="item.edit" (click)="item.edit = false" class="fa fa-check"></i>
+        <i *ngIf="item.edit" (click)="endAddItem(item)" class="fa fa-check"></i>
+        <i *ngIf="item.edit" (click)=" cancelAddItem(item)"class="fa fa-times"></i>
       </div>
       <span *ngIf="!config.hasCheckbox && !item.edit" (click)="onSelectItem(item)">
         {{item.text}}
@@ -56,9 +57,7 @@
 <div [ngSwitch]="hasFilterItems">
   <div *ngSwitchCase="true" class="treeview-container" [style.max-height.px]="maxHeight">
     <ngx-treeview-item *ngFor="let item of filterItems" [config]="config" [item]="item" [template]="itemTemplate || defaultItemTemplate"
-      (checkedChange)="onItemCheckedChange(item, $event)"
-      (selectItem)="bublingSelect($event)"
-      (addItem)="bublingAdd($event)">
+      (checkedChange)="onItemCheckedChange(item, $event)">
     </ngx-treeview-item>
   </div>
   <div *ngSwitchCase="false" class="treeview-text">

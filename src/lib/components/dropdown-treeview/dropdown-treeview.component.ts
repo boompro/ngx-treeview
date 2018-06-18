@@ -67,13 +67,11 @@ export class DropdownTreeviewComponent {
     addNewRootItem() {
       const item = new TreeviewItem({
         isEdit: true,
+        children: [],
         text: '',
-        value: ''
+        value: '',
+        isRoot: true
       });
       this.items.push(item);
-      this.onAddItem({
-        parent: null,
-        added: item
-      });
     }
 }

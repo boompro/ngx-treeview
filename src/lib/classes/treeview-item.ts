@@ -14,6 +14,7 @@ export interface TreeItem {
     collapsed?: boolean;
     children?: TreeItem[];
     isEdit?: boolean;
+    isRoot?: boolean;
 }
 
 export class TreeviewItem {
@@ -21,6 +22,7 @@ export class TreeviewItem {
     private internalChecked = true;
     private internalCollapsed = false;
     private internalEdit = false;
+    private isRoot = false;
     private internalChildren: TreeviewItem[];
     text: string;
     value: any;
@@ -56,6 +58,9 @@ export class TreeviewItem {
                 return new TreeviewItem(child);
             });
         }
+        if (isBoolean(item.isRoot)) {
+          this.isRoot = item.isRoot;
+        }
 
         if (autoCorrectChecked) {
             this.correctChecked();
@@ -72,6 +77,10 @@ export class TreeviewItem {
                 this.internalChecked = value;
             }
         }
+    }
+
+    get isRootItem(): Boolean {
+      return this.isRoot;
     }
 
     get indeterminate(): boolean {

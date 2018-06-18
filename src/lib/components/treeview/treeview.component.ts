@@ -17,7 +17,9 @@ class FilterTreeviewItem extends TreeviewItem {
             disabled: item.disabled,
             checked: item.checked,
             collapsed: item.collapsed,
-            children: item.children
+            // children: item.children,  ???
+            // isEdit: item.edit,        ???
+            // isRoot: item.isRootItem   ???
         });
         this.refItem = item;
     }
@@ -136,23 +138,34 @@ export class TreeviewComponent implements OnChanges {
       }
     }
 
-    bublingSelect(e) {
-      console.log(e);
-      this.selectItem.emit(e);
+    endAddItem(item: TreeviewItem) {
+      if (item.isRootItem) {
+        item.edit = false;
+        this.addNewItem.emit({
+          added: item,
+          parent: null
+        });
+      } else {
+        item.edit = false;
+        console.log(item);
+        this.addNewItem.emit({
+          added: item.children[item.children.length - 1],
+          parent: item
+        });
+      }
+    }
+
+    cancelAddItem(item: TreeviewItem) {
+      if (item.isRootItem) {
+        this.items.length--;
+      } else {
+        item.children.length--;
+      }
     }
 
     onAddNewItem(item: TreeviewItem) {
       item.collapsed = false;
       item.addChildItem();
-      this.addNewItem.emit({
-        added: item.children[item.children.length - 1],
-        parent: item
-      });
-    }
-
-    bublingAdd(e) {
-      console.log(e);
-      this.addNewItem.emit(e);
     }
 
     private createHeaderTemplateContext() {
