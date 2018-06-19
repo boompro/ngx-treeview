@@ -62,6 +62,7 @@ export class DropdownTreeviewComponent {
         this._currentSelected = item;
       }
       this.selectItem.emit(item);
+      this.dropdownDirective.close();
     }
 
     addNewRootItem() {
