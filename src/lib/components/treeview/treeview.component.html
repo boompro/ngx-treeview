@@ -11,9 +11,9 @@
       <div class="input-container">
         <input *ngIf="item.edit" type="text" class="form-control" [(ngModel)]="item.text">
         <i *ngIf="item.edit" (click)="endAddItem(item)" class="fa fa-check"></i>
-        <i *ngIf="item.edit" (click)=" cancelAddItem(item)"class="fa fa-times"></i>
+        <i *ngIf="item.edit" (click)="cancelAddItem(item)"class="fa fa-times"></i>
       </div>
-      <span *ngIf="!config.hasCheckbox && !item.edit" (click)="onSelectItem(item)">
+      <span class="item-name" *ngIf="!config.hasCheckbox && !item.edit" (click)="onSelectItem(item)">
         {{item.text}}
       </span>
       <i *ngIf="config.hasAdd && !item.edit" (click)="onAddNewItem(item)" class="fa fa-plus" aria-hidden="true"></i>

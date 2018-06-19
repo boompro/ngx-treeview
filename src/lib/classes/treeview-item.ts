@@ -9,6 +9,7 @@ export interface TreeviewSelection {
 export interface TreeItem {
     text: string;
     value: any;
+    parent?: TreeviewItem;
     disabled?: boolean;
     checked?: boolean;
     collapsed?: boolean;
@@ -18,6 +19,7 @@ export interface TreeItem {
 }
 
 export class TreeviewItem {
+    public parent: TreeviewItem = null;
     private internalDisabled = false;
     private internalChecked = true;
     private internalCollapsed = false;
@@ -64,6 +66,9 @@ export class TreeviewItem {
 
         if (autoCorrectChecked) {
             this.correctChecked();
+        }
+        if (item.parent) {
+          this.parent = item.parent;
         }
     }
 
@@ -188,6 +193,7 @@ export class TreeviewItem {
 
     addChildItem() {
       const newItem = new TreeviewItem({
+        parent: this,
         checked: false,
         children: [],
         collapsed: false,

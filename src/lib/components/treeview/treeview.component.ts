@@ -147,10 +147,9 @@ export class TreeviewComponent implements OnChanges {
         });
       } else {
         item.edit = false;
-        console.log(item);
         this.addNewItem.emit({
-          added: item.children[item.children.length - 1],
-          parent: item
+          added: item,
+          parent: item.parent
         });
       }
     }
@@ -159,7 +158,7 @@ export class TreeviewComponent implements OnChanges {
       if (item.isRootItem) {
         this.items.length--;
       } else {
-        item.children.length--;
+        item.parent.children.length--;
       }
     }
 
