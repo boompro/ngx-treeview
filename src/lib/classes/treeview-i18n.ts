@@ -28,7 +28,7 @@ export class TreeviewI18nDefault extends TreeviewI18n {
     }
 
     getAllCheckboxText(): string {
-        return 'All';
+        return 'Все';
     }
 
     getFilterPlaceholder(): string {
@@ -36,10 +36,10 @@ export class TreeviewI18nDefault extends TreeviewI18n {
     }
 
     getFilterNoItemsFoundText(): string {
-        return 'No items found';
+        return 'Не найдено';
     }
 
     getTooltipCollapseExpandText(isCollapse: boolean): string {
-        return isCollapse ? 'Expand' : 'Collapse';
+        return isCollapse ? 'Равернуть' : 'Свернуть';
     }
 }
