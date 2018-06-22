@@ -32,7 +32,7 @@ export class TreeviewI18nDefault extends TreeviewI18n {
     }
 
     getFilterPlaceholder(): string {
-        return 'Filter';
+        return 'Фильтр';
     }
 
     getFilterNoItemsFoundText(): string {
