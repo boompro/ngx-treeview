@@ -38,7 +38,7 @@ export class DropdownTreeviewComponent {
          if (this._currentSelected) {
           return this._currentSelected.text;
          } else {
-           return 'Выберите положение';
+           return 'Выберите объект';
          }
       } else {
         return this.i18n.getText(this.treeviewComponent.selection);
