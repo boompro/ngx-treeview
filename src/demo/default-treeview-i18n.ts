@@ -12,7 +12,7 @@ export class DefaultTreeviewI18n extends TreeviewI18n {
 
     getText(selection: TreeviewSelection): string {
         if (selection.uncheckedItems.length === 0) {
-            return this.i18n.language === 'en' ? 'All' : 'Tất cả';
+            return this.i18n.language === 'en' ? 'Все' : 'Tất cả';
         }
 
         switch (selection.checkedItems.length) {
@@ -29,7 +29,7 @@ export class DefaultTreeviewI18n extends TreeviewI18n {
 
     getAllCheckboxText(): string {
         if (this.i18n.language === 'en') {
-            return 'All';
+            return 'Все';
         } else {
             return 'Tất cả';
         }
@@ -37,7 +37,7 @@ export class DefaultTreeviewI18n extends TreeviewI18n {
 
     getFilterPlaceholder(): string {
         if (this.i18n.language === 'en') {
-            return 'Filter';
+            return 'Фильтр';
         } else {
             return 'Lọc';
         }
@@ -45,7 +45,7 @@ export class DefaultTreeviewI18n extends TreeviewI18n {
 
     getFilterNoItemsFoundText(): string {
         if (this.i18n.language === 'en') {
-            return 'No items found';
+            return 'Объекты не найдены';
         } else {
             return 'Không có mục nào được tìm thấy';
         }
@@ -53,7 +53,7 @@ export class DefaultTreeviewI18n extends TreeviewI18n {
 
     getTooltipCollapseExpandText(isCollapse: boolean): string {
         return isCollapse
-            ? this.i18n.language === 'en' ? 'Expand' : 'Mở rộng'
-            : this.i18n.language === 'en' ? 'Collapse' : 'Thu lại';
+            ? this.i18n.language === 'en' ? 'Развернуть' : 'Mở rộng'
+            : this.i18n.language === 'en' ? 'Свернуть' : 'Thu lại';
     }
 }
