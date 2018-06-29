@@ -82,6 +82,10 @@ export class TreeviewComponent implements OnChanges {
         return `${this.config.maxHeight}`;
     }
 
+    get maxWidth(): string {
+      return `${this.config.maxWidth}`;
+    }
+
     ngOnChanges(changes: SimpleChanges) {
         const itemsSimpleChange = changes['items'];
         if (!isNil(itemsSimpleChange)) {
