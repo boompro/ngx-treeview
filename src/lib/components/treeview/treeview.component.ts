@@ -150,9 +150,11 @@ export class TreeviewComponent implements OnChanges {
 
   onEndEdit(item: TreeviewItem) {
     item.edit = false;
-    item.text = item.editText;
+    if (item.text !== item.editText) {
+      item.text = item.editText;
+      this.editItemName.emit(item);
+    }
     item.editText = null;
-    this.editItemName.emit(item);
   }
 
   onEndAddItem(item: TreeviewItem) {
