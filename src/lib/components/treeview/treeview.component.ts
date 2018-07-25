@@ -174,16 +174,6 @@ export class TreeviewComponent implements OnChanges {
 
   cancelEdit(item: TreeviewItem) {
     item.created ? this.deleteItem(item) : this.onCancelEdit(item);
-    /*
-    if (item.created) {
-      if (item.isRootItem) {
-        this.items.length--;
-      } else {
-        item.parent.children.length--;
-      }
-    } else {
-      item.edit = false;
-    }*/
   }
 
   onCancelEdit(item: TreeviewItem) {
