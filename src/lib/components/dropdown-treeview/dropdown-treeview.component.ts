@@ -79,6 +79,18 @@ export class DropdownTreeviewComponent {
     }
 
     onDeletedItem(item: TreeviewItem) {
+      if (item.isRootItem) {
+        const filtredItems = this.items.filter(el => el.value !== item.value);
+        this.items = filtredItems;
+      } else {
+        const filtredChildrens = item.parent.children
+          .filter(el => el.value !== item.value);
+        if (filtredChildrens.length) {
+          item.parent.children = filtredChildrens;
+        } else {
+          item.parent.children = null;
+        }
+      }
       console.log(item);
       this.itemWasDelete.emit(item);
     }
