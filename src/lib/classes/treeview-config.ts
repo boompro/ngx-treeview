@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class TreeviewConfig {
+    hasEdit = true;
+    hasDelete = true;
     hasAdd = true;
     hasCheckbox = false;
     hasAllCheckBox = true;

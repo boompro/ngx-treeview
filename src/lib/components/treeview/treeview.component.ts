@@ -171,6 +171,15 @@ export class TreeviewComponent implements OnChanges {
       item.addChildItem();
     }
 
+    deleteItem(item: TreeviewItem) {
+      console.log('Delete item');
+    }
+
+    editItem(item: TreeviewItem) {
+      item.edit = true;
+      console.log('Edit item');
+    }
+
     private createHeaderTemplateContext() {
         this.headerTemplateContext = {
             config: this.config,
