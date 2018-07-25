@@ -9,272 +9,309 @@ import { TreeviewItemTemplateContext } from '../../interfaces/treeview-item-temp
 import { TreeviewHelper } from '../../classes/treeview-helper';
 
 class FilterTreeviewItem extends TreeviewItem {
-    private readonly refItem: TreeviewItem;
-    constructor(item: TreeviewItem) {
-        super({
-            text: item.text,
-            value: item.value,
-            disabled: item.disabled,
-            checked: item.checked,
-            collapsed: item.collapsed,
-            // children: item.children,  ???
-            // isEdit: item.edit,        ???
-            // isRoot: item.isRootItem   ???
-        });
-        this.refItem = item;
-    }
+  private readonly refItem: TreeviewItem;
+  constructor(item: TreeviewItem) {
+    super({
+      text: item.text,
+      value: item.value,
+      disabled: item.disabled,
+      checked: item.checked,
+      collapsed: item.collapsed,
+      // children: item.children,  ???
+      // isEdit: item.edit,        ???
+      // isRoot: item.isRootItem   ???
+    });
+    this.refItem = item;
+  }
 
-    updateRefChecked() {
-        this.children.forEach(child => {
-            if (child instanceof FilterTreeviewItem) {
-                child.updateRefChecked();
-            }
-        });
+  updateRefChecked() {
+    this.children.forEach(child => {
+      if (child instanceof FilterTreeviewItem) {
+        child.updateRefChecked();
+      }
+    });
 
-        let refChecked = this.checked;
-        if (refChecked) {
-            for (const refChild of this.refItem.children) {
-                if (!refChild.checked) {
-                    refChecked = false;
-                    break;
-                }
-            }
+    let refChecked = this.checked;
+    if (refChecked) {
+      for (const refChild of this.refItem.children) {
+        if (!refChild.checked) {
+          refChecked = false;
+          break;
         }
-        this.refItem.checked = refChecked;
+      }
     }
+    this.refItem.checked = refChecked;
+  }
 }
 
 @Component({
-    selector: 'ngx-treeview',
-    templateUrl: './treeview.component.html',
-    styleUrls: ['./treeview.component.scss']
+  selector: 'ngx-treeview',
+  templateUrl: './treeview.component.html',
+  styleUrls: ['./treeview.component.scss']
 })
 export class TreeviewComponent implements OnChanges {
-    @Input() headerTemplate: TemplateRef<TreeviewHeaderTemplateContext>;
-    @Input() itemTemplate: TemplateRef<TreeviewItemTemplateContext>;
-    @Input() items: TreeviewItem[];
-    @Input() config: TreeviewConfig;
-    @Output() selectedChange = new EventEmitter<any[]>();
-    @Output() filterChange = new EventEmitter<string>();
-    @Output() addNewItem = new EventEmitter<any>();
-    @Output() selectItem = new EventEmitter<TreeviewItem>();
-    headerTemplateContext: TreeviewHeaderTemplateContext;
-    allItem: TreeviewItem;
-    filterText = '';
-    filterItems: TreeviewItem[];
-    selection: TreeviewSelection;
+  @Input() headerTemplate: TemplateRef<TreeviewHeaderTemplateContext>;
+  @Input() itemTemplate: TemplateRef<TreeviewItemTemplateContext>;
+  @Input() items: TreeviewItem[];
+  @Input() config: TreeviewConfig;
+  @Output() selectedChange = new EventEmitter<any[]>();
+  @Output() filterChange = new EventEmitter<string>();
+  @Output() addNewItem = new EventEmitter<any>();
+  @Output() editItemName = new EventEmitter<TreeviewItem>();
+  @Output() selectItem = new EventEmitter<TreeviewItem>();
+  @Output() deletedItem = new EventEmitter<TreeviewItem>();
+  headerTemplateContext: TreeviewHeaderTemplateContext;
+  allItem: TreeviewItem;
+  filterText = '';
+  filterItems: TreeviewItem[];
+  selection: TreeviewSelection;
 
-    constructor(
-        public i18n: TreeviewI18n,
-        private defaultConfig: TreeviewConfig,
-        private eventParser: TreeviewEventParser
-    ) {
-        this.config = this.defaultConfig;
-        this.allItem = new TreeviewItem({ text: 'All', value: undefined });
-        this.createHeaderTemplateContext();
-    }
+  constructor(
+    public i18n: TreeviewI18n,
+    private defaultConfig: TreeviewConfig,
+    private eventParser: TreeviewEventParser
+  ) {
+    this.config = this.defaultConfig;
+    this.allItem = new TreeviewItem({ text: 'All', value: undefined });
+    this.createHeaderTemplateContext();
+  }
 
-    get hasFilterItems(): boolean {
-        return !isNil(this.filterItems) && this.filterItems.length > 0;
-    }
+  get hasFilterItems(): boolean {
+    return !isNil(this.filterItems) && this.filterItems.length > 0;
+  }
 
-    get maxHeight(): string {
-        return `${this.config.maxHeight}`;
-    }
+  get maxHeight(): string {
+    return `${this.config.maxHeight}`;
+  }
 
-    get maxWidth(): string {
-      return `${this.config.maxWidth}`;
-    }
+  get maxWidth(): string {
+    return `${this.config.maxWidth}`;
+  }
 
-    ngOnChanges(changes: SimpleChanges) {
-        const itemsSimpleChange = changes['items'];
-        if (!isNil(itemsSimpleChange)) {
-            if (!isNil(this.items)) {
-                this.updateFilterItems();
-                this.updateCollapsedOfAll();
-                this.raiseSelectedChange();
-            }
-        }
-        this.createHeaderTemplateContext();
-    }
-
-    onAllCollapseExpand() {
-        this.allItem.collapsed = !this.allItem.collapsed;
-        this.filterItems.forEach(item => item.setCollapsedRecursive(this.allItem.collapsed));
-    }
-
-    onFilterTextChange(text: string) {
-        this.filterText = text;
-        this.filterChange.emit(text);
+  ngOnChanges(changes: SimpleChanges) {
+    const itemsSimpleChange = changes['items'];
+    if (!isNil(itemsSimpleChange)) {
+      if (!isNil(this.items)) {
         this.updateFilterItems();
-    }
-
-    onAllCheckedChange() {
-        const checked = this.allItem.checked;
-        this.filterItems.forEach(item => {
-            item.setCheckedRecursive(checked);
-            if (item instanceof FilterTreeviewItem) {
-                item.updateRefChecked();
-            }
-        });
-
+        this.updateCollapsedOfAll();
         this.raiseSelectedChange();
-    }
-
-    onItemCheckedChange(item: TreeviewItem, checked: boolean) {
-        if (item instanceof FilterTreeviewItem) {
-            item.updateRefChecked();
-        }
-
-        this.updateCheckedOfAll();
-        this.raiseSelectedChange();
-    }
-
-    raiseSelectedChange() {
-        this.generateSelection();
-        const values = this.eventParser.getSelectedChange(this);
-        this.selectedChange.emit(values);
-    }
-
-    onSelectItem(item: TreeviewItem) {
-      if (!item.children) {
-        this.selectItem.emit(item);
       }
     }
+    this.createHeaderTemplateContext();
+  }
 
-    endAddItem(item: TreeviewItem) {
-      if (item.isRootItem) {
-        item.edit = false;
-        this.addNewItem.emit({
-          added: item,
-          parent: null
-        });
-      } else {
-        item.edit = false;
-        this.addNewItem.emit({
-          added: item,
-          parent: item.parent
-        });
+  onAllCollapseExpand() {
+    this.allItem.collapsed = !this.allItem.collapsed;
+    this.filterItems.forEach(item => item.setCollapsedRecursive(this.allItem.collapsed));
+  }
+
+  onFilterTextChange(text: string) {
+    this.filterText = text;
+    this.filterChange.emit(text);
+    this.updateFilterItems();
+  }
+
+  onAllCheckedChange() {
+    const checked = this.allItem.checked;
+    this.filterItems.forEach(item => {
+      item.setCheckedRecursive(checked);
+      if (item instanceof FilterTreeviewItem) {
+        item.updateRefChecked();
       }
+    });
+
+    this.raiseSelectedChange();
+  }
+
+  onItemCheckedChange(item: TreeviewItem, checked: boolean) {
+    if (item instanceof FilterTreeviewItem) {
+      item.updateRefChecked();
     }
 
-    cancelAddItem(item: TreeviewItem) {
+    this.updateCheckedOfAll();
+    this.raiseSelectedChange();
+  }
+
+  raiseSelectedChange() {
+    this.generateSelection();
+    const values = this.eventParser.getSelectedChange(this);
+    this.selectedChange.emit(values);
+  }
+
+  onSelectItem(item: TreeviewItem) {
+    if (!item.children) {
+      this.selectItem.emit(item);
+    }
+  }
+
+  endEdit(item: TreeviewItem) {
+    item.created ? this.onEndAddItem(item) : this.onEndEdit(item);
+  }
+
+  onEndEdit(item: TreeviewItem) {
+    item.edit = false;
+    item.text = item.editText;
+    item.editText = null;
+    this.editItemName.emit(item);
+  }
+
+  onEndAddItem(item: TreeviewItem) {
+    item.created = false;
+    item.edit = false;
+    item.text = item.editText;
+    item.editText = null;
+    this.addNewItem.emit({
+      added: item,
+      parent: item.parent
+    });
+  }
+
+  enterNameItem(e: KeyboardEvent, item: TreeviewItem) {
+    if (e.keyCode === 13) {
+      this.endEdit(item);
+    }
+  }
+
+  cancelEdit(item: TreeviewItem) {
+    item.created ? this.deleteItem(item) : this.onCancelEdit(item);
+    /*
+    if (item.created) {
       if (item.isRootItem) {
         this.items.length--;
       } else {
         item.parent.children.length--;
       }
+    } else {
+      item.edit = false;
+    }*/
+  }
+
+  onCancelEdit(item: TreeviewItem) {
+    item.editText = null;
+    item.edit = false;
+  }
+
+  onAddNewItem(item: TreeviewItem) {
+    item.collapsed = false;
+    item.addChildItem();
+  }
+
+  deleteItem(item: TreeviewItem) {
+    if (item.isRootItem) {
+      const filtredItems = this.items.filter(el => el.value !== item.value);
+      this.items = filtredItems;
+    } else {
+      const filtredChildrens = item.parent.children
+        .filter(el => el.value !== item.value);
+      if (filtredChildrens.length) {
+        item.parent.children = filtredChildrens;
+      } else {
+        item.parent.children = null;
+      }
+    }
+    this.deletedItem.emit(item);
+  }
+
+  editItem(item: TreeviewItem) {
+    item.edit = true;
+    item.editText = item.text;
+  }
+
+  private createHeaderTemplateContext() {
+    this.headerTemplateContext = {
+      config: this.config,
+      item: this.allItem,
+      onCheckedChange: () => this.onAllCheckedChange(),
+      onCollapseExpand: () => this.onAllCollapseExpand(),
+      onFilterTextChange: (text) => this.onFilterTextChange(text)
+    };
+  }
+
+  private generateSelection() {
+    let checkedItems: TreeviewItem[] = [];
+    let uncheckedItems: TreeviewItem[] = [];
+    if (!isNil(this.items)) {
+      const selection = TreeviewHelper.concatSelection(this.items, checkedItems, uncheckedItems);
+      checkedItems = selection.checked;
+      uncheckedItems = selection.unchecked;
     }
 
-    onAddNewItem(item: TreeviewItem) {
-      item.collapsed = false;
-      item.addChildItem();
-    }
+    this.selection = {
+      checkedItems: checkedItems,
+      uncheckedItems: uncheckedItems
+    };
+  }
 
-    deleteItem(item: TreeviewItem) {
-      console.log('Delete item');
-    }
-
-    editItem(item: TreeviewItem) {
-      item.edit = true;
-      console.log('Edit item');
-    }
-
-    private createHeaderTemplateContext() {
-        this.headerTemplateContext = {
-            config: this.config,
-            item: this.allItem,
-            onCheckedChange: () => this.onAllCheckedChange(),
-            onCollapseExpand: () => this.onAllCollapseExpand(),
-            onFilterTextChange: (text) => this.onFilterTextChange(text)
-        };
-    }
-
-    private generateSelection() {
-        let checkedItems: TreeviewItem[] = [];
-        let uncheckedItems: TreeviewItem[] = [];
-        if (!isNil(this.items)) {
-            const selection = TreeviewHelper.concatSelection(this.items, checkedItems, uncheckedItems);
-            checkedItems = selection.checked;
-            uncheckedItems = selection.unchecked;
+  private updateFilterItems() {
+    if (this.filterText !== '') {
+      const filterItems: TreeviewItem[] = [];
+      const filterText = this.filterText.toLowerCase();
+      this.items.forEach(item => {
+        const newItem = this.filterItem(item, filterText);
+        if (!isNil(newItem)) {
+          filterItems.push(newItem);
         }
-
-        this.selection = {
-            checkedItems: checkedItems,
-            uncheckedItems: uncheckedItems
-        };
+      });
+      this.filterItems = filterItems;
+    } else {
+      this.filterItems = this.items;
     }
 
-    private updateFilterItems() {
-        if (this.filterText !== '') {
-            const filterItems: TreeviewItem[] = [];
-            const filterText = this.filterText.toLowerCase();
-            this.items.forEach(item => {
-                const newItem = this.filterItem(item, filterText);
-                if (!isNil(newItem)) {
-                    filterItems.push(newItem);
-                }
-            });
-            this.filterItems = filterItems;
-        } else {
-            this.filterItems = this.items;
-        }
+    this.updateCheckedOfAll();
+  }
 
-        this.updateCheckedOfAll();
+  private filterItem(item: TreeviewItem, filterText: string): TreeviewItem {
+    const isMatch = includes(item.text.toLowerCase(), filterText);
+    if (isMatch) {
+      return item;
+    } else {
+      if (!isNil(item.children)) {
+        const children: TreeviewItem[] = [];
+        item.children.forEach(child => {
+          const newChild = this.filterItem(child, filterText);
+          if (!isNil(newChild)) {
+            children.push(newChild);
+          }
+        });
+        if (children.length > 0) {
+          const newItem = new FilterTreeviewItem(item);
+          newItem.collapsed = false;
+          newItem.children = children;
+          return newItem;
+        }
+      }
     }
 
-    private filterItem(item: TreeviewItem, filterText: string): TreeviewItem {
-        const isMatch = includes(item.text.toLowerCase(), filterText);
-        if (isMatch) {
-            return item;
-        } else {
-            if (!isNil(item.children)) {
-                const children: TreeviewItem[] = [];
-                item.children.forEach(child => {
-                    const newChild = this.filterItem(child, filterText);
-                    if (!isNil(newChild)) {
-                        children.push(newChild);
-                    }
-                });
-                if (children.length > 0) {
-                    const newItem = new FilterTreeviewItem(item);
-                    newItem.collapsed = false;
-                    newItem.children = children;
-                    return newItem;
-                }
-            }
-        }
+    return undefined;
+  }
 
-        return undefined;
+  private updateCheckedOfAll() {
+    let itemChecked: boolean = null;
+    for (const filterItem of this.filterItems) {
+      if (itemChecked === null) {
+        itemChecked = filterItem.checked;
+      } else if (itemChecked !== filterItem.checked) {
+        itemChecked = undefined;
+        break;
+      }
     }
 
-    private updateCheckedOfAll() {
-        let itemChecked: boolean = null;
-        for (const filterItem of this.filterItems) {
-            if (itemChecked === null) {
-                itemChecked = filterItem.checked;
-            } else if (itemChecked !== filterItem.checked) {
-                itemChecked = undefined;
-                break;
-            }
-        }
-
-        if (itemChecked === null) {
-            itemChecked = false;
-        }
-
-        this.allItem.checked = itemChecked;
+    if (itemChecked === null) {
+      itemChecked = false;
     }
 
-    private updateCollapsedOfAll() {
-        let hasItemExpanded = false;
-        for (const filterItem of this.filterItems) {
-            if (!filterItem.collapsed) {
-                hasItemExpanded = true;
-                break;
-            }
-        }
+    this.allItem.checked = itemChecked;
+  }
 
-        this.allItem.collapsed = !hasItemExpanded;
+  private updateCollapsedOfAll() {
+    let hasItemExpanded = false;
+    for (const filterItem of this.filterItems) {
+      if (!filterItem.collapsed) {
+        hasItemExpanded = true;
+        break;
+      }
     }
+
+    this.allItem.collapsed = !hasItemExpanded;
+  }
 }

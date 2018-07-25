@@ -10,6 +10,7 @@
         [itemTemplate]="itemTemplate"
         (selectedChange)="onSelectedChange($event)"
         (addNewItem)="onAddItem($event)"
+        (deletedItem)="onDeletedItem($event)"
         (selectItem)="onSelectItem($event)"
         (filterChange)="onFilterChange($event)">
       </ngx-treeview>

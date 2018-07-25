@@ -22,6 +22,7 @@ export class DropdownTreeviewComponent {
     @Output() filterChange = new EventEmitter<string>();
     @Output() selectItem = new EventEmitter<TreeviewItem>();
     @Output() itemWasAdded = new EventEmitter<any>();
+    @Output() itemWasDelete = new EventEmitter<TreeviewItem>();
     @ViewChild(TreeviewComponent) treeviewComponent: TreeviewComponent;
     @ViewChild(DropdownDirective) dropdownDirective: DropdownDirective;
     private _currentSelected: TreeviewItem;
@@ -74,5 +75,10 @@ export class DropdownTreeviewComponent {
         isRoot: true
       });
       this.items.push(item);
+    }
+
+    onDeletedItem(item: TreeviewItem) {
+      console.log(item);
+      this.itemWasDelete.emit(item);
     }
 }

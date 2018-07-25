@@ -24,8 +24,10 @@ export class TreeviewItem {
     private internalChecked = true;
     private internalCollapsed = false;
     private internalEdit = false;
+    private internalCreated = true;
     private isRoot = false;
     private internalChildren: TreeviewItem[];
+    editText: string;
     text: string;
     value: any;
 
@@ -98,6 +100,16 @@ export class TreeviewItem {
 
     set edit(value: boolean) {
       this.internalEdit = value;
+    }
+
+    set created(value: boolean) {
+      if (!value) {
+        this.internalCreated = false;
+      }
+    }
+
+    get created(): boolean {
+      return this.internalCreated;
     }
 
     setCheckedRecursive(value: boolean) {
