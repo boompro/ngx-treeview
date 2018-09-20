@@ -139,9 +139,8 @@ export class TreeviewComponent implements OnChanges {
   }
 
   onSelectItem(item: TreeviewItem) {
-    // this.items.forEach((i) => i.selected = false);
-      item.selected = true;
     if (!item.children) {
+      item.selected = true;
       this.selectItem.emit(item);
     }
   }
