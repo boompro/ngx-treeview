@@ -91,12 +91,10 @@ export class DropdownTreeviewComponent {
           item.parent.children = null;
         }
       }
-      console.log(item);
       this.itemWasDelete.emit(item);
     }
 
     onEditName(item: TreeviewItem) {
-      console.log(item);
       this.itemWasEdit.emit(item);
     }
 }

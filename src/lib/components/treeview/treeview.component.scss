@@ -34,6 +34,9 @@
 
       .item-name {
         cursor: pointer;
+        &.treeview-item-selected {
+          font-weight: bold;
+        }      
       }
 
       .fa-plus {

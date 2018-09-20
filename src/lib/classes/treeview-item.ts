@@ -18,6 +18,8 @@ export interface TreeItem {
     isRoot?: boolean;
 }
 
+const roots: any[] = [];
+
 export class TreeviewItem {
     public parent: TreeviewItem = null;
     private internalDisabled = false;
@@ -27,6 +29,7 @@ export class TreeviewItem {
     private internalCreated = true;
     private isRoot = false;
     private internalChildren: TreeviewItem[];
+    private internalSelected = false;
     editText: string;
     text: string;
     value: any;
@@ -48,7 +51,7 @@ export class TreeviewItem {
             this.collapsed = item.collapsed;
         }
         if (isBoolean(item.isEdit)) {
-          this.internalEdit = item.isEdit;
+            this.internalEdit = item.isEdit;
         }
         if (isBoolean(item.disabled)) {
             this.disabled = item.disabled;
@@ -58,19 +61,21 @@ export class TreeviewItem {
                 if (this.disabled === true) {
                     child.disabled = true;
                 }
-
+                child.parent = this;
                 return new TreeviewItem(child);
             });
         }
         if (isBoolean(item.isRoot)) {
-          this.isRoot = item.isRoot;
+            this.isRoot = item.isRoot;
         }
 
         if (autoCorrectChecked) {
             this.correctChecked();
         }
         if (item.parent) {
-          this.parent = item.parent;
+            this.parent = item.parent;
+        } else {
+            roots.push(this);
         }
     }
 
@@ -87,7 +92,7 @@ export class TreeviewItem {
     }
 
     get isRootItem(): Boolean {
-      return this.isRoot;
+        return this.isRoot;
     }
 
     get indeterminate(): boolean {
@@ -95,21 +100,21 @@ export class TreeviewItem {
     }
 
     get edit(): boolean {
-      return this.internalEdit;
+        return this.internalEdit;
     }
 
     set edit(value: boolean) {
-      this.internalEdit = value;
+        this.internalEdit = value;
     }
 
     set created(value: boolean) {
-      if (!value) {
-        this.internalCreated = false;
-      }
+        if (!value) {
+            this.internalCreated = false;
+        }
     }
 
     get created(): boolean {
-      return this.internalCreated;
+        return this.internalCreated;
     }
 
     setCheckedRecursive(value: boolean) {
@@ -178,6 +183,15 @@ export class TreeviewItem {
         }
     }
 
+    get selected(): boolean {
+        return this.internalSelected;
+    }
+
+    set selected(value: boolean) {
+        this.dropSelection();
+        this.internalSelected = value;
+    }
+
     getSelection(): TreeviewSelection {
         let checkedItems: TreeviewItem[] = [];
         let uncheckedItems: TreeviewItem[] = [];
@@ -204,22 +218,22 @@ export class TreeviewItem {
     }
 
     addChildItem() {
-      const newItem = new TreeviewItem({
-        parent: this,
-        checked: false,
-        children: [],
-        collapsed: false,
-        disabled: false,
-        text: '',
-        value: '',
-        isEdit: true
-      }, false);
-      if (this.internalChildren) {
-        this.internalChildren.push(newItem);
-      } else {
-        this.internalChildren = [];
-        this.internalChildren.push(newItem);
-      }
+        const newItem = new TreeviewItem({
+            parent: this,
+            checked: false,
+            children: [],
+            collapsed: false,
+            disabled: false,
+            text: '',
+            value: '',
+            isEdit: true
+        }, false);
+        if (this.internalChildren) {
+            this.internalChildren.push(newItem);
+        } else {
+            this.internalChildren = [];
+            this.internalChildren.push(newItem);
+        }
     }
 
     private getCorrectChecked(): boolean {
@@ -240,4 +254,18 @@ export class TreeviewItem {
 
         return checked;
     }
+
+    private dropSelection() {
+        const rootNode: TreeviewItem = this;
+        const subDrop = (item: TreeviewItem) => {
+            item.internalSelected = false;
+            if (item.internalChildren) {
+                item.internalChildren.forEach((chld) => subDrop(chld));
+            }
+
+        };
+        subDrop(rootNode);
+        roots.forEach((root) => subDrop(root));
+    }
 }
+
