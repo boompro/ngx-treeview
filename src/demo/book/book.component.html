@@ -48,7 +48,7 @@
           <label>
             <strong>ngx-treeview</strong>
           </label>
-          <ngx-treeview [config]="config" [items]="items" (filterChange)="onFilterChange($event)" (selectedChange)="values = $event">
+          <ngx-treeview #treeview [config]="config" [items]="items" (filterChange)="onFilterChange($event)" (selectItem)="logSelect($event)" (selectedChange)="values = $event">
           </ngx-treeview>
         </div>
       </div>

@@ -36,7 +36,10 @@
         cursor: pointer;
         &.treeview-item-selected {
           font-weight: bold;
-        }      
+        }
+        &.treeview-item-active {
+          background-color: blue;
+        }
       }
 
       .fa-plus {

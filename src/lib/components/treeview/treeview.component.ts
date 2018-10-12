@@ -66,6 +66,8 @@ export class TreeviewComponent implements OnChanges {
   filterItems: TreeviewItem[];
   selection: TreeviewSelection;
 
+  private activeItem: TreeviewItem;
+
   constructor(
     public i18n: TreeviewI18n,
     private defaultConfig: TreeviewConfig,
@@ -139,6 +141,11 @@ export class TreeviewComponent implements OnChanges {
   }
 
   onSelectItem(item: TreeviewItem) {
+    if (this.activeItem) {
+      this.activeItem.active = false;
+    }
+    this.activeItem = item;
+    this.activeItem.active = true;
     if (!item.children) {
       item.selected = true;
       this.selectItem.emit(item);
@@ -196,6 +203,63 @@ export class TreeviewComponent implements OnChanges {
   editItem(item: TreeviewItem) {
     item.edit = true;
     item.editText = item.text;
+  }
+
+  onKeyUp() {
+    this.fixActive();
+    console.log('keyUp fired');
+    this.activeItem.active = false;
+    const bro = this.activeItem.getBrother(-1);
+    if (bro) {
+      this.activeItem = bro;
+    }
+    this.activeItem.active = true;
+  }
+
+  onKeyDn() {
+    this.fixActive();
+    console.log('keyDn fired');
+    this.activeItem.active = false;
+    const bro = this.activeItem.getBrother(1);
+    if (bro) {
+      this.activeItem = bro;
+    }
+    this.activeItem.active = true;
+  }
+
+  onKeyEnter() {
+    const bro = this.activeItem;
+    if (bro.active) {
+      this.onSelectItem(bro);
+    }
+  }
+
+  onKeyLeft() {
+    console.log('keyLeft fired');
+    this.fixActive();
+    this.activeItem.active = false;
+    const bro = this.activeItem.getParent(-1);
+    if (bro) {
+      this.activeItem = bro;
+    }
+    this.activeItem.active = true;
+  }
+
+  onKeyRight() {
+    console.log('keyRight fired');
+    this.fixActive();
+    this.activeItem.active = false;
+    const bro = this.activeItem.getParent(1);
+    if (bro) {
+      this.activeItem = bro;
+    }
+    this.activeItem.active = true;
+  }
+
+  private fixActive() {
+    if (!this.activeItem) {
+      this.activeItem = this.items[0];
+    }
   }
 
   private createHeaderTemplateContext() {

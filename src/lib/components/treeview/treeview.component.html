@@ -15,7 +15,7 @@
         <i *ngIf="item.edit" (click)="endEdit(item)" class="fa fa-check"></i>
         <i *ngIf="item.edit" (click)="cancelEdit(item)" class="fa fa-times"></i>
       </div>
-      <span class="item-name" *ngIf="!config.hasCheckbox && !item.edit" (click)="onSelectItem(item)"  [ngClass]="{'treeview-item-selected': item.selected}">
+      <span class="item-name" *ngIf="!config.hasCheckbox && !item.edit" (click)="onSelectItem(item)"  [ngClass]="{'treeview-item-selected': item.selected, 'treeview-item-active': item.active}">
         {{item.text}}
       </span>
       <i *ngIf="config.hasAdd && !item.edit" (click)="onAddNewItem(item)" class="fa fa-plus" aria-hidden="true"></i>
