@@ -94,11 +94,11 @@ export class BookComponent implements OnInit {
         break;
       }
       case KEY_CODE.SPACE: {
-        this.treeView.onKeyEnter();
+        this.treeView.onKeySelect();
         break;
       }
       case KEY_CODE.ENTER: {
-        this.treeView.onKeyEnter();
+        this.treeView.onKeySelect();
         break;
       }
       default: {

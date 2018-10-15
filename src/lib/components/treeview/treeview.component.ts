@@ -225,7 +225,7 @@ export class TreeviewComponent implements OnChanges {
     this.activeItem.active = true;
   }
 
-  onKeyEnter() {
+  onKeySelect() {
     const bro = this.activeItem;
     if (bro.active) {
       this.onSelectItem(bro);
