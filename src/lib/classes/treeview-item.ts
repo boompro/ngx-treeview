@@ -247,6 +247,7 @@ export class TreeviewItem {
   }
 
   getBrother(step: -1 | 1): TreeviewItem {
+
     if (this.parent) {
       return this._getNeighbour(step, this.parent.children);
     } else {
@@ -255,15 +256,14 @@ export class TreeviewItem {
   }
 
   getParent(step: -1 | 1): TreeviewItem {
-     if (this.children) {
-       return this._getNeighbour(step, this.children);
-     } else {
-       return this._getNeighbour(step, this.parent);
+     if (step === 1) {
+       return this.children && this.children[0];
+    } else {
+      return this.parent && this.parent;
      }
   }
 
   private _getNeighbour(step: -1 | 1, items: TreeviewItem[]): TreeviewItem {
-    console.log(items);
     if (items) {
       const myIdx = items.findIndex((item) => item === this);
       return items.find((_item, idx) => idx - step === myIdx);

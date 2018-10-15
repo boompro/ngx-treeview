@@ -207,7 +207,6 @@ export class TreeviewComponent implements OnChanges {
 
   onKeyUp() {
     this.fixActive();
-    console.log('keyUp fired');
     this.activeItem.active = false;
     const bro = this.activeItem.getBrother(-1);
     if (bro) {
@@ -218,7 +217,6 @@ export class TreeviewComponent implements OnChanges {
 
   onKeyDn() {
     this.fixActive();
-    console.log('keyDn fired');
     this.activeItem.active = false;
     const bro = this.activeItem.getBrother(1);
     if (bro) {
@@ -235,7 +233,6 @@ export class TreeviewComponent implements OnChanges {
   }
 
   onKeyLeft() {
-    console.log('keyLeft fired');
     this.fixActive();
     this.activeItem.active = false;
     const bro = this.activeItem.getParent(-1);
@@ -246,7 +243,6 @@ export class TreeviewComponent implements OnChanges {
   }
 
   onKeyRight() {
-    console.log('keyRight fired');
     this.fixActive();
     this.activeItem.active = false;
     const bro = this.activeItem.getParent(1);
