@@ -259,7 +259,7 @@ export class TreeviewItem {
      if (step === 1) {
        return this.children && this.children[0];
     } else {
-      return this.parent && this.parent;
+      return this.parent;
      }
   }
 
