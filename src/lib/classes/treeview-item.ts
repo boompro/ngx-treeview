@@ -77,7 +77,9 @@ export class TreeviewItem {
     if (item.parent) {
       this.parent = item.parent;
     } else {
-      roots.push(this);
+      if (this.value) {
+        roots.push(this);
+      }
     }
   }
 
