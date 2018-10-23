@@ -94,6 +94,7 @@ export class TreeviewComponent implements OnChanges {
     const itemsSimpleChange = changes['items'];
     if (!isNil(itemsSimpleChange)) {
       this.allItem = new TreeviewItem({ text: 'All', value: null, children: [] });
+      this.activeItem = null;
       if (!isNil(this.items)) {
         this.updateFilterItems();
         this.updateCollapsedOfAll();
