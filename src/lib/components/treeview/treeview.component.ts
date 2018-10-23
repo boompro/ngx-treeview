@@ -74,7 +74,7 @@ export class TreeviewComponent implements OnChanges {
     private eventParser: TreeviewEventParser
   ) {
     this.config = this.defaultConfig;
-    this.allItem = new TreeviewItem({ text: 'All', value: undefined });
+    // this.allItem = new TreeviewItem({ text: 'All', value: undefined });
     this.createHeaderTemplateContext();
   }
 
@@ -93,10 +93,13 @@ export class TreeviewComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     const itemsSimpleChange = changes['items'];
     if (!isNil(itemsSimpleChange)) {
+      this.allItem = new TreeviewItem({ text: 'All', value: null, children: [] });
       if (!isNil(this.items)) {
         this.updateFilterItems();
         this.updateCollapsedOfAll();
         this.raiseSelectedChange();
+        this.allItem.children = this.items;
+        this.items.forEach((item) => item.parent = this.allItem);
       }
     }
     this.createHeaderTemplateContext();
@@ -208,9 +211,17 @@ export class TreeviewComponent implements OnChanges {
   onKeyUp() {
     this.fixActive();
     this.activeItem.active = false;
-    const bro = this.activeItem.getBrother(-1);
-    if (bro) {
-      this.activeItem = bro;
+    if (this.activeItem.parent) {
+      const bro = this.activeItem.getBrother(-1);
+      if (bro) {
+        this.activeItem = bro;
+      }
+    } else {
+      let idx = this.items.findIndex((item) => item.value === this.activeItem.value) - 1;
+      if (idx < 0) {
+        idx = 0;
+      }
+      this.activeItem = this.items[idx];
     }
     this.activeItem.active = true;
   }

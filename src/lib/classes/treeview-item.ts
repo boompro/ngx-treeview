@@ -19,8 +19,6 @@ export interface TreeItem {
   isRoot?: boolean;
 }
 
-const roots: any[] = [];
-
 export class TreeviewItem {
   public parent: TreeviewItem = null;
   private internalDisabled = false;
@@ -76,10 +74,6 @@ export class TreeviewItem {
     }
     if (item.parent) {
       this.parent = item.parent;
-    } else {
-      if (this.value) {
-        roots.push(this);
-      }
     }
   }
 
@@ -249,20 +243,17 @@ export class TreeviewItem {
   }
 
   getBrother(step: -1 | 1): TreeviewItem {
-
     if (this.parent) {
       return this._getNeighbour(step, this.parent.children);
-    } else {
-      return this._getNeighbour(step, roots);
     }
   }
 
   getParent(step: -1 | 1): TreeviewItem {
-     if (step === 1) {
-       return this.children && this.children[0];
+    if (step === 1) {
+      return this.children && this.children[0];
     } else {
-      return this.parent;
-     }
+      return this.parent.value ? this.parent : null;
+    }
   }
 
   private _getNeighbour(step: -1 | 1, items: TreeviewItem[]): TreeviewItem {
@@ -294,7 +285,7 @@ export class TreeviewItem {
   }
 
   private dropSelection() {
-    const rootNode: TreeviewItem = this;
+    let rootNode: TreeviewItem = this;
     const subDrop = (item: TreeviewItem) => {
       item.internalSelected = false;
       if (item.internalChildren) {
@@ -302,8 +293,9 @@ export class TreeviewItem {
       }
 
     };
+
+    while (rootNode.parent) { rootNode = rootNode.parent; }
     subDrop(rootNode);
-    roots.forEach((root) => subDrop(root));
   }
 }
 
